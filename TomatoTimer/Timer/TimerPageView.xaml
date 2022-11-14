@@ -1,0 +1,164 @@
+﻿<Page x:Class="TomatoTimer.Timer.TimerPageView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TomatoTimer.Timer"
+      mc:Ignorable="d" 
+      d:DesignHeight="340" d:DesignWidth="320"
+      Title="TimerPageView">
+
+    <Page.Resources>
+        <Style x:Key="StartStopButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#FFFF6767" />
+            <Setter Property="Margin" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#a70000" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#ff5252" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ChangeTimerModeButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#FFFF6767" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="TanohaSans-Regular" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Margin" Value="4 5 4 5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#ff5252" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
+    <Grid Background="#ff7b7b">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0"
+              Grid.RowSpan="1" Grid.ColumnSpan="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.4*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="PomodoroMode"
+                    Grid.Row="1" Grid.Column="1"
+                    Grid.RowSpan="1" Grid.ColumnSpan="2"
+                    Content="Pomodoro"
+                    Command="{Binding ChangeTimerMode}" CommandParameter="Pomodoro"
+                    Style="{StaticResource ChangeTimerModeButtonStyle}">
+                
+            </Button>
+
+            <Button x:Name="ShortBreakMode"
+                    Grid.Row="1" Grid.Column="3"
+                    Grid.RowSpan="1" Grid.ColumnSpan="2"
+                    Content="Short Break"
+                    Command="{Binding ChangeTimerMode}" CommandParameter="ShortBreak"
+                    Style="{StaticResource ChangeTimerModeButtonStyle}">
+
+            </Button>
+            <Button x:Name="LongBreakMode"
+                    Grid.Row="1" Grid.Column="5"
+                    Grid.RowSpan="1" Grid.ColumnSpan="2"
+                    Content="Long Break"
+                    Command="{Binding ChangeTimerMode}" CommandParameter="LongBreak"
+                    Style="{StaticResource ChangeTimerModeButtonStyle}">
+
+            </Button>
+
+        </Grid>
+
+        <Label x:Name="TimerLabel"
+               Grid.Row="1" Grid.Column="1"
+               Grid.RowSpan="1" Grid.ColumnSpan="3"
+               FontFamily="TahoneSans-Regular" FontWeight="Regular" FontSize="42"
+               VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+               Foreground="White" Content="{Binding Path=TaskTimeLeft, UpdateSourceTrigger=PropertyChanged}">
+        </Label>
+
+        <Grid Grid.Row="2" Grid.Column="1"
+              Grid.RowSpan="1" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="StartTheClock"
+                    Grid.Row="1" Grid.Column="1"
+                    Style="{StaticResource StartStopButtonStyle}"
+                    Command="{Binding ChangeTimerState}" CommandParameter="Start">
+                <Image Source="..\Assets\Images\Start_Icon.png"
+                       Margin="5" />
+            </Button>
+            <Button x:Name="StopTheClock"
+                    Grid.Row="1" Grid.Column="2"
+                    Style="{StaticResource StartStopButtonStyle}"
+                    Command="{Binding ChangeTimerState}" CommandParameter="Stop">
+                <Image Source="..\Assets\Images\Pause_Icon.png"
+                       Margin="5" />
+            </Button>
+        </Grid>
+        
+    </Grid>
+</Page>
