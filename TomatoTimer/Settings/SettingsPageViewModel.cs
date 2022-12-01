@@ -68,8 +68,7 @@ namespace TomatoTimer.Settings
         public SettingsPageViewModel()
         {
             _databaseManager = new DatabaseManager();
-            _databaseManager.CreateConnection();
-            _timerSettings = _databaseManager.ReadDataFromTheBase();
+            _timerSettings = _databaseManager.ReadDataFromTheDatabase();
 
             PomodoroMinutes = (int.Parse(_timerSettings.ElementAt(0)) / 60).ToString();
             ShortBreakMinutes = (int.Parse(_timerSettings.ElementAt(1)) / 60).ToString();

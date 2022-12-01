@@ -55,7 +55,6 @@ namespace TomatoTimer
         public MainWindowViewModel(MainWindow windowToAttach)
         {
             DatabaseManager appSettingsDatabaseManager = new DatabaseManager();
-            appSettingsDatabaseManager.CreateConnection();
             
             ApplicationMainWindow = windowToAttach;
             MainWindowNavigationService = ApplicationMainWindow.AppNavigator.NavigationService;

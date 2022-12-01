@@ -12,14 +12,13 @@ namespace TomatoTimer.Databases
     public class DatabaseManager
     {
         private SqliteConnection _dbConnection;
-        private string workingDirectory;
         
         public DatabaseManager()
         {
-            workingDirectory = Environment.CurrentDirectory;
+            ConnectToTheDB();
         }
 
-        public void CreateConnection()
+        private void ConnectToTheDB()
         {
             
             try
@@ -28,12 +27,12 @@ namespace TomatoTimer.Databases
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message + "dupa");
+                MessageBox.Show($"Exception {ex.Message} appeared during trying to connect to database");
             }
 
         }
 
-        public List<string> ReadDataFromTheBase()
+        public List<string> ReadDataFromTheDatabase()
         {
             List<string> returnList = new List<string>();
 
@@ -49,6 +48,7 @@ namespace TomatoTimer.Databases
                 returnList.Add(databaseReader.GetString(2)); ;
             }
 
+            _dbConnection.Dispose();
             return returnList;
         }
 
@@ -74,7 +74,9 @@ namespace TomatoTimer.Databases
 
             _dbConnection.Open();
             SqliteCommand commandToExecute = new SqliteCommand("UPDATE [user-settings] SET value = " + (value * 60).ToString() + " WHERE id = " + id, _dbConnection);
-            commandToExecute.ExecuteNonQuery();        
+            commandToExecute.ExecuteNonQuery();
+
+            _dbConnection.Dispose();
         }
     }
 }

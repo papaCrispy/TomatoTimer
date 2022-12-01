@@ -17,7 +17,7 @@ namespace TomatoTimer.Timer
         public DispatcherTimer DispatcherTimer
         {
             get { return _dispatcherTimer; }
-            set { _dispatcherTimer = value; }
+            private set { _dispatcherTimer = value; }
         }
 
         private int _duration;
@@ -31,7 +31,6 @@ namespace TomatoTimer.Timer
         {
             this.DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal);
             this.DispatcherTimer.Interval = TimeSpan.FromMilliseconds(constInterval);
-
         }
     }
 }

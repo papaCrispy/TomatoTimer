@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TomatoTimer.Databases;
+using TomatoTimer.CustomMessageBox;
 
 namespace TomatoTimer.Timer
 {
@@ -143,22 +144,21 @@ namespace TomatoTimer.Timer
 
         public void UpdateTimerDuration()
         {
-            _taskTimer.DispatcherTimer.Stop();
-            _databaseManager.CreateConnection();           
+            _taskTimer.DispatcherTimer.Stop();          
 
             switch(TimerMode)
             {
                 case TimerMode.Pomodoro:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheBase()[0]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[0]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
 
                     break;
                 case TimerMode.ShortBreak:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheBase()[1]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[1]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
                     break;
                 case TimerMode.LongBreak:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheBase()[2]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[2]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
                     break;
             }
@@ -166,13 +166,21 @@ namespace TomatoTimer.Timer
 
         private bool IsUserSureToContinue()
         {
-            MessageBoxResult userAnswer = MessageBox.Show("The timer is still running - are you sure you want to switch?", "The Timer is running!", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (!(userAnswer == MessageBoxResult.Yes))
+            CustomMessageBoxViewModel temporaryCustomMessageBoxViewModel = new CustomMessageBoxViewModel();
+            UserChoice userAnswer = CustomMessageBox.CustomMessageBox.Show(temporaryCustomMessageBoxViewModel, "Warning", "We detected that the timer is currently runnig! Would you like to continue?");
+            switch(userAnswer)
             {
-                return false;
+                case UserChoice.OK:
+                    return true;
+                    break;
+                case UserChoice.Cancel:
+                    return false;
+                    break;
+                default:
+                    return false;
+                    break;
             }
-
-            return true;
         }
+      
     }
 }
