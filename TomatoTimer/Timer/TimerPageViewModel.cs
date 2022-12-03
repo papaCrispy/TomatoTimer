@@ -24,7 +24,7 @@ namespace TomatoTimer.Timer
     {
         private TaskTimer _taskTimer;
 
-        private DatabaseManager _databaseManager;
+        private AppSettingsDatabase _databaseManager;
 
         private string _taskTimeLeft;
         public string TaskTimeLeft
@@ -71,7 +71,7 @@ namespace TomatoTimer.Timer
         {
 
             TimerMode = TimerMode.Pomodoro;
-            _databaseManager = new DatabaseManager();
+            _databaseManager = new AppSettingsDatabase();
 
             _taskTimer = new TaskTimer();
             UpdateTimerDuration();
@@ -149,16 +149,16 @@ namespace TomatoTimer.Timer
             switch(TimerMode)
             {
                 case TimerMode.Pomodoro:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[0]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase().ToList()[0]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
 
                     break;
                 case TimerMode.ShortBreak:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[1]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase().ToList()[1]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
                     break;
                 case TimerMode.LongBreak:
-                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase()[2]);
+                    _taskTimer.Duration = int.Parse(_databaseManager.ReadDataFromTheDatabase().ToList()[2]);
                     UpdateTaskTimeLeft(this, EventArgs.Empty);
                     break;
             }

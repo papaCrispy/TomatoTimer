@@ -9,48 +9,49 @@ using System.Windows;
 
 namespace TomatoTimer.Databases
 {
-    public class DatabaseManager
+    public class AppSettingsDatabase : IDatabaseManager
     {
-        private SqliteConnection _dbConnection;
-        
-        public DatabaseManager()
-        {
-            ConnectToTheDB();
-        }
+        private SqliteConnection _SQLiteConnection;
+        public SqliteConnection SQLiteConnection { get => _SQLiteConnection; set => _SQLiteConnection = value; }
 
-        private void ConnectToTheDB()
+        public AppSettingsDatabase()
         {
-            
             try
             {
-                _dbConnection = new SqliteConnection(@"Data Source=..\..\..\Databases\app-settings.DB");
+                SQLiteConnection = new SqliteConnection(@"Data Source=..\..\..\Databases\pomodorotimer.DB");
             }
             catch(Exception ex)
             {
                 MessageBox.Show($"Exception {ex.Message} appeared during trying to connect to database");
             }
-
         }
+
+        public void ConnectToTheDatabase()
+        {
+            SQLiteConnection.Open();
+        }
+
 
         public List<string> ReadDataFromTheDatabase()
         {
             List<string> returnList = new List<string>();
+            ConnectToTheDatabase();
 
-            _dbConnection.Open();
-            
-            SqliteCommand commandToExecute = new SqliteCommand("SELECT * FROM [user-settings]", _dbConnection);
+            SqliteCommand commandToExecute = new SqliteCommand("SELECT * FROM [user-settings]", _SQLiteConnection);
             SqliteDataReader databaseReader = commandToExecute.ExecuteReader();
 
             int counter = 0;
 
-            while(databaseReader.Read())
+            while (databaseReader.Read())
             {
                 returnList.Add(databaseReader.GetString(2)); ;
             }
 
-            _dbConnection.Dispose();
+            _SQLiteConnection.Dispose();
             return returnList;
         }
+
+     
 
         public void UpdateTheDatabase(string property, int value)
         {
@@ -72,11 +73,11 @@ namespace TomatoTimer.Databases
             }
                 
 
-            _dbConnection.Open();
-            SqliteCommand commandToExecute = new SqliteCommand("UPDATE [user-settings] SET value = " + (value * 60).ToString() + " WHERE id = " + id, _dbConnection);
+            _SQLiteConnection.Open();
+            SqliteCommand commandToExecute = new SqliteCommand("UPDATE [user-settings] SET value = " + (value * 60).ToString() + " WHERE id = " + id, _SQLiteConnection);
             commandToExecute.ExecuteNonQuery();
 
-            _dbConnection.Dispose();
+            _SQLiteConnection.Dispose();
         }
     }
 }
